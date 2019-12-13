@@ -11,8 +11,8 @@ lemma = WordNetLemmatizer()
 
 
 def cleanse(doc):
-    stop_free = " ".join([i for i in doc.lower().split() if i not in stop])
-    punc_free = "".join(ch for ch in stop_free if ch not in exclude)
+    stop_num_free = " ".join([i for i in doc.lower().split() if i not in stop])
+    punc_free = "".join(ch for ch in stop_num_free if ch not in exclude and len(ch) < 30)
     normalized = " ".join(lemma.lemmatize(word) for word in punc_free.split())
     return normalized
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     blob_list = [b for b in generator]
     count = 0
 
-    for blob in blob_list[0:10]:
+    for blob in blob_list[0:100]:
         blob_text = block_blob_service.get_blob_to_text(containers_name[0], blob.name, encoding='latin-1')
         raw_text = blob_text.content
         try:

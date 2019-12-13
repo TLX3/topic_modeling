@@ -2,9 +2,12 @@ import os
 from os import listdir
 from os.path import isfile, join
 from gensim import corpora
-from gensim.models import LdaMulticore
+from gensim.models import LdaModel, Phrases
 
-NUM_TOPICS = 5
+NUM_TOPICS = 10
+NUM_PASSES = 20
+ITERATIONS = 300
+CHUNKSIZE = 2000
 documents = []
 
 path = os.path.dirname(os.path.realpath(__file__)) + "/data/14d9"
@@ -16,25 +19,29 @@ for file in files:
         document = [word for word in row.split(" ")]
         documents.append(document)
 
-# LDA model: Dictionary and Corpus
+bigram = Phrases(documents, min_count=20)
+#trigram = Phrases(bigram[documents], threshold=10)
+for idx in range(len(documents)):
+    for token in bigram[documents[idx]]:
+        if '_' in token:
+            documents[idx].append(token)
+
+# Dictionary and Corpus
 dct = corpora.Dictionary(documents)
+dct.filter_extremes(no_below=20, no_above=0.5)
 corpus = [dct.doc2bow(line) for line in documents]
 
-# Train the LDA model
-lda_model = LdaMulticore(corpus=corpus,
+# Train LDA model
+lda_model = LdaModel(corpus=corpus,
                          id2word=dct,
                          random_state=100,
                          num_topics=NUM_TOPICS,
-                         passes=10,
-                         chunksize=1000,
-                         alpha='asymmetric',
-                         decay=0.5,
-                         offset=64,
-                         eta=None,
-                         eval_every=0,
-                         iterations=100,
-                         gamma_threshold=0.001,
-                         per_word_topics=True)
+                         passes=NUM_PASSES,
+                         chunksize=CHUNKSIZE,
+                         iterations=ITERATIONS,
+                         alpha='auto',
+                         eta='auto',
+                         eval_every=None)
 
 print("LDA Model")
 for idx in range(NUM_TOPICS):
