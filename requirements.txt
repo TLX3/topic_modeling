@@ -1,0 +1,4 @@
+azure
+beautifulsoup4
+nltk
+gensim
