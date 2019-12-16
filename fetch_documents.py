@@ -1,8 +1,8 @@
 from azure.storage.blob import BlockBlobService
 from bs4 import BeautifulSoup
-import os
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
+import os
 import string
 import re
 
@@ -14,16 +14,19 @@ lemma = WordNetLemmatizer()
 def cleanse(doc):
     # Remove stopwords
     stop_word_removed = " ".join([i for i in doc.lower().split() if i not in stop and len(i) > 2])
+
     # Remove punctuations
     puncs_removed = "".join(ch for ch in stop_word_removed if ch not in exclude)
     lemmatized_doc = " ".join(lemma.lemmatize(word) for word in puncs_removed.split())
+
     # Remove non-ASCII characters and words mixed with numbers
     lemmatized_doc = re.compile(r"\d*([^\d\W]+)\d*").sub(r"\1", lemmatized_doc)
     cleansed_doc = re.sub(r'[^\x00-\x7f]', r'', lemmatized_doc)
+
     return cleansed_doc
 
 
-if __name__ == '__main__':
+def get_SEC_Documents():
     # Azure blob credentials for LDAG
     account_name = 'stanfordproject'
     account_key = 'Brs84kSEd9yycVvTvbjuGxYlqBsROZHFi2CHV48tRDGO5 + jFwG83j0hraXPDogAeFZNUlBLKMCyhBeX / iWo9bA =='
@@ -31,20 +34,14 @@ if __name__ == '__main__':
     # Create the BlockBlockService to call the Blob service for the storage account
     block_blob_service = BlockBlobService(account_name, account_key)
 
-    # Get all containers
-    containers = block_blob_service.list_containers()
-    containers_name = [c.name for c in containers]
-    # print("Available containers: {}".format(containers_name))
-    # ['14d9', 'earnings-call', 'ldag', 'meta', 'news', 'proxystatement']
-
-    # check 14d9 container
-    generator = block_blob_service.list_blobs(containers_name[0])
+    # Check 14d9 container
+    generator = block_blob_service.list_blobs('14d9')
 
     blob_list = [b for b in generator]
     count = 0
 
     for blob in blob_list[0:100]:
-        blob_text = block_blob_service.get_blob_to_text(containers_name[0], blob.name, encoding='latin-1')
+        blob_text = block_blob_service.get_blob_to_text('14d9', blob.name, encoding='latin-1')
         raw_text = blob_text.content
         try:
             soup = BeautifulSoup(raw_text, 'html.parser')
@@ -69,3 +66,7 @@ if __name__ == '__main__':
             count += 1
 
     print('Number of Errors: ', count)
+
+
+if __name__ == '__main__':
+    get_SEC_Documents()

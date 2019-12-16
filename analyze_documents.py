@@ -19,25 +19,30 @@ def build_lda_model(CIKs):
         files = [f for f in listdir(main_path + '/' + CIK) if isfile(join(main_path + '/' + CIK, f))]
         for file in files:
             try:
-                print(main_path + '/' + CIK + '/' + file)
                 with open(main_path + '/' + CIK + '/' + file, "r", encoding="latin-1") as f:
                     for row in f:
-                        print(row, 'here')
                         document = [word for word in row.split(" ") if len(word) > 2]
                         documents.append(document)
             except IOError as e:
                 print("Couldn't open file (%s)." % e)
 
+    # Add bigram, trigrams, and quadgrams
     bigram = Phrases(documents, threshold=10)
-    #trigram = Phrases(bigram[documents], threshold=10)
+    trigram = Phrases(bigram[documents], threshold=10)
+    quadgram = Phrases(trigram[documents], threshold=10)
     for idx in range(len(documents)):
         for token in bigram[documents[idx]]:
             if '_' in token:
                 documents[idx].append(token)
+        for token in trigram[documents[idx]]:
+            if token.count('_') == 2:
+                documents[idx].append(token)
+        for token in quadgram[documents[idx]]:
+            if token.count('_') == 3:
+                documents[idx].append(token)
 
     # Dictionary
     dct = corpora.Dictionary(documents)
-    #dct.filter_extremes(no_above=0.5)
 
     # Corpus
     corpus = [dct.doc2bow(line) for line in documents]
@@ -53,4 +58,4 @@ def build_lda_model(CIKs):
 
 
 if __name__ == '__main__':
-    build_lda_model(['100412'])
+    build_lda_model(['100412', '1011657', '1009463', '1009356', '1002388', '101063'])
