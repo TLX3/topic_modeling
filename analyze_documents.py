@@ -1,6 +1,5 @@
-import os
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, dirname, realpath
 from gensim import corpora
 from gensim.models import LdaModel, Phrases
 
@@ -10,7 +9,7 @@ ITERATIONS = 300
 CHUNKSIZE = 2000
 documents = []
 
-path = os.path.dirname(os.path.realpath(__file__)) + "/data/14d9"
+path = dirname(realpath(__file__)) + "/data/14d9"
 files = [f for f in listdir(path) if isfile(join(path, f))]
 
 for file in files:
