@@ -12,10 +12,15 @@ lemma = WordNetLemmatizer()
 
 
 def cleanse(doc):
-    non_ascii_stop_free = " ".join([re.sub(r'[^\x00-\x7f]', r'', i) for i in doc.lower().split() if i not in stop])
-    punc_free = "".join(ch for ch in non_ascii_stop_free if ch not in exclude and len(ch) > 2)
-    normalized = " ".join(lemma.lemmatize(word) for word in punc_free.split())
-    return normalized
+    # Remove stopwords
+    stop_word_removed = " ".join([i for i in doc.lower().split() if i not in stop and len(i) > 2])
+    # Remove punctuations
+    puncs_removed = "".join(ch for ch in stop_word_removed if ch not in exclude)
+    lemmatized_doc = " ".join(lemma.lemmatize(word) for word in puncs_removed.split())
+    # Remove non-ASCII characters and words mixed with numbers
+    lemmatized_doc = re.compile(r"\d*([^\d\W]+)\d*").sub(r"\1", lemmatized_doc)
+    cleansed_doc = re.sub(r'[^\x00-\x7f]', r'', lemmatized_doc)
+    return cleansed_doc
 
 
 if __name__ == '__main__':
@@ -45,14 +50,22 @@ if __name__ == '__main__':
             soup = BeautifulSoup(raw_text, 'html.parser')
             # remove html tags
             text_only = soup.get_text()
-            # remove non-ascii characters, stopwords and punctuations
             processed_text = cleanse(text_only)
-            file_name = os.path.dirname(os.path.realpath(__file__)) + '/data/14d9/' + ''.join(blob.name.split('/')[1:])
-            with open(file_name, 'a') as f:
-                f.write(processed_text)
-                f.close()
-        except Exception as e:
-            print(e)
+            CIK = blob.name.split('/')[0:1][0]
+            fname = ''.join(blob.name.split('/')[1:])
+            CIK_directory = os.path.dirname(os.path.realpath(__file__)) + '/data/14d9/' + CIK
+            file_path = CIK_directory + '/' + fname
+            if not os.path.exists(CIK_directory):
+                os.makedirs(CIK_directory)
+            try:
+                with open(file_path, 'w') as f:
+                    f.write(processed_text)
+                    print("Added 14d9 file for CIK: ", CIK)
+                    f.close()
+            except IOError as e2:
+                print(e2)
+        except Exception as e1:
+            print(e1)
             count += 1
 
     print('Number of Errors: ', count)
