@@ -4,7 +4,9 @@ import vuetify from './plugins/vuetify'
 import VueHighcharts from 'vue-highcharts'
 import Highcharts from 'highcharts'
 import loadWordcloud from 'highcharts/modules/wordcloud'
+import exportingInit from "highcharts/modules/exporting";
 
+exportingInit(Highcharts);
 loadWordcloud(Highcharts);
 
 Vue.use(VueHighcharts, { Highcharts })
