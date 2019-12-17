@@ -5,6 +5,10 @@ from azure.storage.blob import BlockBlobService
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
+from nltk import download
+
+download('stopwords')
+download('wordnet')
 
 stop = set(stopwords.words('english'))
 exclude = set(string.punctuation)

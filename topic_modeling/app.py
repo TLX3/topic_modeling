@@ -24,8 +24,9 @@ def available_CIKs():
 @app.route('/get_topics', methods=['GET'])
 def get_topics():
     CIKs = request.args.getlist('CIKs')
-    return json_response(200, build_lda_model(CIKs))
+    num_topics = request.args.get('num_topics')
+    return json_response(200, build_lda_model(CIKs, int(num_topics)))
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)

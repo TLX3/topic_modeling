@@ -4,16 +4,14 @@ from gensim import corpora
 from gensim.models import Phrases
 from gensim.models.wrappers import LdaMallet
 
-NUM_TOPICS = 5
-ITERATIONS = 300
+ITERATIONS = 200
 
-documents = []
-lda_model = None
-dct = None
-corpus = None
+def build_lda_model(CIKs, num_topics):
+    documents = []
+    lda_model = None
+    dct = None
+    corpus = None
 
-
-def build_lda_model(CIKs):
     main_path = dirname(realpath(__file__)) + "/data/14d9"
     for CIK in CIKs:
         files = [f for f in listdir(main_path + '/' + CIK) if isfile(join(main_path + '/' + CIK, f))]
@@ -26,20 +24,24 @@ def build_lda_model(CIKs):
             except IOError as e:
                 print("Couldn't open file (%s)." % e)
 
+    phrases_only = [[] for _ in range(len(documents))]
+
     # Add bigram, trigrams, and quadgrams
-    bigram = Phrases(documents, threshold=10)
-    trigram = Phrases(bigram[documents], threshold=10)
-    quadgram = Phrases(trigram[documents], threshold=10)
+    bigram = Phrases(documents)
+    trigram = Phrases(bigram[documents])
+    quadgram = Phrases(trigram[documents])
     for idx in range(len(documents)):
         for token in bigram[documents[idx]]:
             if '_' in token:
-                documents[idx].append(token)
+                phrases_only[idx].append(token)
         for token in trigram[documents[idx]]:
             if token.count('_') == 2:
-                documents[idx].append(token)
+                phrases_only[idx].append(token)
         for token in quadgram[documents[idx]]:
             if token.count('_') == 3:
-                documents[idx].append(token)
+                phrases_only[idx].append(token)
+
+    documents = phrases_only
 
     # Dictionary
     dct = corpora.Dictionary(documents)
@@ -47,13 +49,13 @@ def build_lda_model(CIKs):
     # Corpus
     corpus = [dct.doc2bow(line) for line in documents]
 
-    mallet_path = dirname(realpath(__file__)) + "/mallet-2.0.8/bin/mallet"
     environ['MALLET_HOME'] = dirname(realpath(__file__)) + '/mallet-2.0.8/'
-    lda_mallet = LdaMallet(mallet_path, corpus=corpus, num_topics=NUM_TOPICS, id2word=dct, iterations=ITERATIONS)
+    mallet_path = dirname(realpath(__file__)) + "/mallet-2.0.8/bin/mallet"
+    lda_mallet = LdaMallet(mallet_path, corpus=corpus, num_topics=num_topics, id2word=dct, iterations=ITERATIONS)
 
     # Show Topics
     print("LDA Model MALLET")
-    for idx in range(NUM_TOPICS):
+    for idx in range(num_topics):
         print("Topic #%s-" % idx, lda_mallet.print_topic(idx, 10))
 
     # Format topic and percentage for api export
@@ -65,3 +67,6 @@ def build_lda_model(CIKs):
             current_topic.append({'weight': float(percent), 'term': term[1:-1]})
         formatted_topics.append(current_topic)
     return formatted_topics
+
+if __name__ == '__main__':
+    build_lda_model(CIKs=['1001258'], num_topics=5)
