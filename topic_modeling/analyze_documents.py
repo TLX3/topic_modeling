@@ -56,4 +56,13 @@ def build_lda_model(CIKs):
     for idx in range(NUM_TOPICS):
         print("Topic #%s-" % idx, lda_mallet.print_topic(idx, 10))
 
-    return lda_mallet.print_topics()
+    # Format topic and percentage for api export
+    formatted_topics = []
+    for _, topic_str in lda_mallet.print_topics():
+        current_topic = []
+        for percent_topic in topic_str.split(' + '):
+            percent, term = percent_topic.split('*')
+            current_topic.append({'weight': float(percent), 'term': term[1:-1]})
+        formatted_topics.append(current_topic)
+    print("HERE--------------", formatted_topics)
+    return formatted_topics
