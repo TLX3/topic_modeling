@@ -64,5 +64,4 @@ def build_lda_model(CIKs):
             percent, term = percent_topic.split('*')
             current_topic.append({'weight': float(percent), 'term': term[1:-1]})
         formatted_topics.append(current_topic)
-    print("HERE--------------", formatted_topics)
     return formatted_topics

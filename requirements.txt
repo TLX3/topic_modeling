@@ -2,3 +2,5 @@ azure
 beautifulsoup4
 nltk
 gensim
+flask
+flask_cors
