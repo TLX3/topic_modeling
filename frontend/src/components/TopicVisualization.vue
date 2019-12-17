@@ -3,17 +3,40 @@
         xs12
         mt-5
       >
-        <h2 v-if="chartData.length > 0" class="headline font-weight-bold">Word Cloud for Topic #{{selectedTopic + 1}}</h2>
-        <h4 v-if="chartData.length > 0" class="headline my-3">Select Topic Number</h4>
-        <v-select
-                v-if="chartData.length > 0"
-                v-model="selectedTopic"
-                :items="topicNumbers"
-                label="Ex: 1"
-                solo
-                @change="refreshChartTopic"
-        />
-        <highcharts v-if="chartData.length > 0" :options="chartOptions"></highcharts>
+          <v-card v-if="chartData.length > 0">
+            <v-toolbar
+                    color="#273a56"
+                    dark
+            >
+              <v-toolbar-title v-if="currentView">Word Cloud for Topic #{{selectedTopic}}</v-toolbar-title>
+              <v-toolbar-title v-else>Topic #{{selectedTopic}} terms and weights</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-select
+                      style="margin-top: 25px;"
+                      color="#273a56"
+                      solo
+                  v-if="chartData.length > 0"
+                  v-model="selectedTopic"
+                  :items="topicNumbers"
+                  label="Topic Number Ex: 1"
+                  @change="refreshChartTopic"
+              />
+              <v-btn
+                icon
+                @click="currentView = !currentView"
+              >
+                <v-icon>{{ currentView ? 'mdi-table' : 'mdi-chart-bubble' }}</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <highcharts v-if='currentView' :options="chartOptions"></highcharts>
+              <v-data-table
+                      v-else
+              :headers="headers"
+              :items="chartData[selectedTopic - 1]"
+              hide-default-footer
+              class="elevation-1"
+            ></v-data-table>
+          </v-card>
       </v-flex>
 </template>
 
@@ -22,7 +45,12 @@
         name: 'SelectCIKs',
         props: ['chartData'],
         data: () => ({
-            selectedTopic: 0,
+            currentView: true,
+            headers: [
+              { text: 'Term', value: 'term' },
+              { text: 'Weight', value: 'weight' }
+            ],
+            selectedTopic: 1,
             topicNumbers: [],
             chartOptions: {
                 accessibility: {
@@ -36,7 +64,7 @@
                 series: [{
                     type: 'wordcloud',
                     data:  [],
-                    name: 'Weight'
+                    name: 'Score'
                 }],
                 title: {
                     text: 'LDA generated words'
@@ -49,7 +77,7 @@
         methods: {
             refreshChartTopic () {
                 let seriesData = []
-                this.chartData[this.selectedTopic].forEach((datum) => {
+                this.chartData[this.selectedTopic - 1].forEach((datum) => {
                     seriesData.push({
                         name: datum.term,
                         weight: datum.weight * 100
@@ -67,9 +95,8 @@
             chartData: function () {
                 this.topicNumbers = []
                 this.chartData.forEach((topic, i) => {
-                    this.topicNumbers.push(i)
+                    this.topicNumbers.push(i + 1)
                 })
-
                 this.refreshChartTopic()
             }
         }

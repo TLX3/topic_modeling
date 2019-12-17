@@ -1,13 +1,12 @@
 <template>
   <v-container>
     <v-layout
-      text-center
       wrap
     >
       <loading :active.sync="isLoading" :is-full-page="true"></loading>
-      <SelectCIKs @updateCIKs="updateCIKs"/>
-      <v-flex>
-        <v-btn v-if="selectedCIKs.length > 0" @click='getTopics' color="green" dark>Generate Topics</v-btn>
+      <v-flex style="display: flex; justify-content: space-evenly;">
+        <SelectCIKs @updateCIKs="updateCIKs" @updateNumTopics="updateNumTopics"/>
+        <v-btn style="margin-top: 55px;" v-if="selectedCIKs.length > 0" @click='getTopics' color="green" dark>Generate Topics</v-btn>
       </v-flex>
       <TopicVisualization :chartData="chartData" />
     </v-layout>
@@ -27,6 +26,7 @@
     },
     data: () => ({
         selectedCIKs: [],
+        num_topics: 5,
         chartData: [],
         isLoading: false
     }),
@@ -34,12 +34,16 @@
         updateCIKs (CIKs) {
           this.selectedCIKs = CIKs
         },
+        updateNumTopics (num_topics) {
+          this.num_topics = num_topics
+        },
         getTopics () {
             this.isLoading = true
             let url = process.env.VUE_APP_API_URL + '/get_topics?'
             this.selectedCIKs.forEach((CIK) => {
                 url += `CIKs=${CIK}&`
             })
+            url += `num_topics=${this.num_topics}`
             fetch(url)
                 .then(response => response.json())
                 .then((data) => {

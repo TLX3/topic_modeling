@@ -6,6 +6,7 @@ from gensim.models.wrappers import LdaMallet
 
 ITERATIONS = 200
 
+
 def build_lda_model(CIKs, num_topics):
     documents = []
     lda_model = None
@@ -35,10 +36,10 @@ def build_lda_model(CIKs, num_topics):
             if '_' in token:
                 phrases_only[idx].append(token)
         for token in trigram[documents[idx]]:
-            if token.count('_') == 2:
+            if '_' in token:
                 phrases_only[idx].append(token)
         for token in quadgram[documents[idx]]:
-            if token.count('_') == 3:
+            if '_' in token:
                 phrases_only[idx].append(token)
 
     documents = phrases_only
@@ -67,6 +68,3 @@ def build_lda_model(CIKs, num_topics):
             current_topic.append({'weight': float(percent), 'term': term[1:-1]})
         formatted_topics.append(current_topic)
     return formatted_topics
-
-if __name__ == '__main__':
-    build_lda_model(CIKs=['1001258'], num_topics=5)
