@@ -8,7 +8,7 @@
         <SelectCIKs @updateCIKs="updateCIKs" @updateNumTopics="updateNumTopics"/>
         <v-btn style="margin-top: 55px;" v-if="selectedCIKs.length > 0" @click='getTopics' color="green" dark>Generate Topics</v-btn>
       </v-flex>
-      <TopicVisualization :chartData="chartData" />
+      <TopicVisualization :chartData="chartData" :analyticsData="analyticsData"/>
     </v-layout>
   </v-container>
 </template>
@@ -28,6 +28,7 @@
         selectedCIKs: [],
         num_topics: 5,
         chartData: [],
+        analyticsData: [],
         isLoading: false
     }),
     methods: {
@@ -47,7 +48,11 @@
             fetch(url)
                 .then(response => response.json())
                 .then((data) => {
-                    this.chartData = data
+                    /* eslint-disable no-console */
+                    console.log(data)
+                    /* eslint-enable no-console */
+                    this.chartData = data[0]
+                    this.analyticsData = data.slice(1)
                     this.isLoading = false
                 })
         }

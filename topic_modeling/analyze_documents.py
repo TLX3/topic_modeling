@@ -112,4 +112,5 @@ def build_lda_model(CIKs, num_topics):
     # Create df for analytics over topics
     df_dominant_topic, df_representative_topic, df_topic_distribution = create_topic_analytics(lda_mallet, corpus)
 
-    return formatted_topics, df_dominant_topic, df_representative_topic, df_topic_distribution
+    return formatted_topics, df_dominant_topic.to_dict('records'), \
+           df_representative_topic.to_dict('records'), df_topic_distribution.to_dict('records')

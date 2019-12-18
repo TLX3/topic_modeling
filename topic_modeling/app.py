@@ -25,7 +25,9 @@ def available_CIKs():
 def get_topics():
     CIKs = request.args.getlist('CIKs')
     num_topics = request.args.get('num_topics')
-    return json_response(200, build_lda_model(CIKs, int(num_topics)))
+    topic_data = build_lda_model(CIKs, int(num_topics))
+    print(topic_data)
+    return json_response(200, topic_data)
 
 
 if __name__ == '__main__':
