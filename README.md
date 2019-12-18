@@ -1,8 +1,62 @@
-# SEC Topic Modeling - Fullstack application for the analysis and visualization of select 14D9 documents
+# CS410 Course Project
+#### Fullstack application for topic modeling on select 14D9 documents
 
-## Search or select CIK/Ticker name
+There exists a large amount of unstructured textual data with regards to SEC filings. Based on the immense size and continual growth of the SEC filing corpus, it is difficult to access relevant content within the collection. By using topic modeling on SEC filings, we uncover hidden topics that are present across the collection that can facilitate the reduction of irrelevant documents for users. The goal of this project is to build an investment banking specific tool that uncover both single word and phrases as topics in SEC filings. Additionally, uncovered topics might provide grounds or inspiration for research into some other domain. In other words, detect trends that would have otherwise been difficult to capture or would have been missed.
 
-## Perform LDA on 14D9 documents for respective companies and display topics as word bubbles
+## Getting Started
 
+These instructions will get the project up and running.
 
+### Prerequisites
+
+You will require both Node and Python installed to run locally.
+If you don't have them installed they can be obtained from 
+```
+https://nodejs.org/en/download/
+https://www.python.org/downloads/
+```
+
+### Installation
+
+Instructions to get the application running locally
+
+At the main project directory level, run these commands from a terminal.
+* It would be advised to first create a new virtual environment before installing Python packages.
+```
+pip install -r requirements.txt
+```
+
+And then
+
+```
+cd frontend
+npm install
+```
+
+## Deploying locally
+At the main project directory level, run these commands from a terminal.
+```
+cd topic_modeling
+python app.py
+```
+and from another terminal
+```
+cd frontend
+npm run serve
+```
+
+## Built With
+
+* [Flask](http://flask.palletsprojects.com/en/1.1.x/) - Micro web framework used to build APIs
+* [Vue](https://vuejs.org/) - Framework for building user interfaces and single page applications
+* [Gensim](https://radimrehurek.com/gensim/) - Open-source library for unsupervised topic modeling and natural language processing
+* and many more python and node dependencies
+
+## Author
+
+* **Tseten Lama** - tsetenl2@illinois.edu
+
+## License
+
+This project is licensed under the MIT License
 

@@ -5,7 +5,7 @@
       >
         <div style="display: flex; justify-content: space-evenly;">
           <div>
-            <div class="headline font-weight-bold mb-3">Select Central Index Keys (CIKs) for Topic Modeling</div>
+            <div class="headline font-weight-bold mb-3">Select Company (CIK) for Topic Modeling</div>
             <v-select
                     color="#273a56"
                     v-model="selectedCIKs"
