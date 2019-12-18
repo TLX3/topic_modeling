@@ -9,12 +9,13 @@
                     dark
             >
               <v-toolbar-title v-if="currentView">Word Cloud for Topic #{{selectedTopic}}</v-toolbar-title>
-              <v-toolbar-title v-else>Topic #{{selectedTopic}} terms and weights</v-toolbar-title>
+              <v-toolbar-title v-else>Topic #{{selectedTopic}} Word Distribution</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-select
-                      style="margin-top: 25px;"
+                      style="margin-top: 30px;"
                       color="#273a56"
                       solo
+                      light
                   v-if="chartData.length > 0"
                   v-model="selectedTopic"
                   :items="topicNumbers"
@@ -28,7 +29,7 @@
                 <v-icon>{{ currentView ? 'mdi-table' : 'mdi-chart-bubble' }}</v-icon>
               </v-btn>
             </v-toolbar>
-            <highcharts v-if='currentView' :options="chartOptions"></highcharts>
+            <highcharts style="padding-top: 10px;" v-if='currentView' :options="chartOptions"></highcharts>
               <v-data-table
                       v-else
               :headers="headers"
