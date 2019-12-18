@@ -5,10 +5,10 @@ from gensim.models import Phrases
 from gensim.models.wrappers import LdaMallet
 import pandas as pd
 
-ITERATIONS = 200
+ITERATIONS = 100
 
 
-def create_topic_analytics(lda_model, corpus):
+def create_topic_analytics(lda_model, corpus, documents, CIKs):
     # Create df to aggregate and display topic breakdown
     topics_df = pd.DataFrame()
     for i, row in enumerate(lda_model[corpus]):
@@ -20,21 +20,13 @@ def create_topic_analytics(lda_model, corpus):
                 topics_df = topics_df.append(
                     pd.Series([int(topic_num), round(prop_topic, 4), topic_keywords]), ignore_index=True)
     topics_df.columns = ['Dominant_Topic', 'Percentage_Contribution', 'Topic_Keywords']
+    contents = pd.Series(documents)
+    topics_df = pd.concat([topics_df, contents], axis=1)
     df_topic_keywords = topics_df
 
     # Create df for dominant topic at document level
     df_dominant_topic = df_topic_keywords.reset_index()
-    df_dominant_topic.columns = ['Document_No', 'Dominant_Topic', 'Topic_Percentage_Contrib', 'Keywords']
-
-    # Create df for displaying most relevant document for each topic
-    df_representative_topic = pd.DataFrame()
-    df_topics_grouped = df_topic_keywords.groupby('Dominant_Topic')
-    for i, group in df_topics_grouped:
-        df_representative_topic = pd.concat([df_representative_topic,
-                                                 group.sort_values(['Percentage_Contribution'], ascending=[0]).head(1)],
-                                                axis=0)
-    df_representative_topic.reset_index(drop=True, inplace=True)
-    df_representative_topic.columns = ['Topic_Num', "Topic_Percentage_Contrib", "Keywords"]
+    df_dominant_topic.columns = ['Document_No', 'Dominant_Topic', 'Topic_Percentage_Contrib', 'Keywords', 'Text']
 
     # Create df for displaying topic distribution across documents
     topic_counts = df_topic_keywords['Dominant_Topic'].value_counts()
@@ -44,7 +36,18 @@ def create_topic_analytics(lda_model, corpus):
     df_topic_distribution.columns = ['Dominant_Topic', 'Topic_Keywords', 'Num_Documents', 'Percentage_Documents']
     df_topic_distribution.dropna(subset=['Num_Documents'], how='all', inplace=True)
 
-    return df_dominant_topic, df_representative_topic, df_topic_distribution
+    # Create df for displaying most relevant document for each topic
+    df_representative_topic = pd.DataFrame()
+    df_topics_grouped = df_topic_keywords.groupby('Dominant_Topic')
+    for i, group in df_topics_grouped:
+        df_representative_topic = pd.concat([df_representative_topic,
+                                                 group.sort_values(['Percentage_Contribution'], ascending=[0]).head(1)],
+                                                axis=0)
+    df_representative_topic.reset_index(drop=True, inplace=True)
+    df_representative_topic.columns = ['Topic_Num', "Topic_Percentage_Contrib", "Keywords", "Text"]
+    #df_representative_topic['CIKs'] = CIKs
+
+    return df_dominant_topic, df_topic_distribution, df_representative_topic
 
 
 def build_lda_model(CIKs, num_topics):
@@ -110,7 +113,6 @@ def build_lda_model(CIKs, num_topics):
         formatted_topics.append(current_topic)
 
     # Create df for analytics over topics
-    df_dominant_topic, df_representative_topic, df_topic_distribution = create_topic_analytics(lda_mallet, corpus)
+    df_dominant_topic, df_topic_distribution, df_representative_topic = create_topic_analytics(lda_mallet, corpus, documents, CIKs)
 
-    return formatted_topics, df_dominant_topic.to_dict('records'), \
-           df_representative_topic.to_dict('records'), df_topic_distribution.to_dict('records')
+    return formatted_topics, df_dominant_topic.to_dict('records'), df_topic_distribution.to_dict('records'), df_representative_topic.to_dict('records')
