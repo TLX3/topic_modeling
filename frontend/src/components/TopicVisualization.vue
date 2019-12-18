@@ -62,7 +62,7 @@
                 right
               >
                 <v-tab>
-                  SHOW VISUALIZATION
+                  SHOW DISTRIBUTION
                 </v-tab>
                 <v-tab>
                   SHOW ANALYTICS
@@ -85,10 +85,10 @@
             currentView: true,
             showAnalytics: 0,
             analyticsType: "Dominant topic in each document",
-            analyticsTypes: ["Dominant topic in each document", "Topic distribution across companies", "Most representative document for topic"],
+            analyticsTypes: ["Dominant topic in each document", "Topic distribution by company", "Most representative document for topic"],
             headers: [
               { text: 'Term', value: 'term' },
-              { text: 'Weight', value: 'weight' }
+              { text: 'Score', value: 'weight' }
             ],
             selectedTopic: 1,
             topicNumbers: [],
@@ -120,7 +120,7 @@
                 this.chartData[this.selectedTopic - 1].forEach((datum) => {
                     seriesData.push({
                         name: datum.term,
-                        weight: datum.weight * 100
+                        weight: datum.weight
                     })
                 })
                 let optionsCopy = JSON.parse(JSON.stringify(this.chartOptions))

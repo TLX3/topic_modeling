@@ -11,7 +11,7 @@
                 class="elevation-1"
         ></v-data-table>
         <v-data-table
-                v-else-if="analyticsType === 'Topic distribution across companies'"
+                v-else-if="analyticsType === 'Topic distribution by company'"
                 :headers="headers2"
                 :items="analyticsData[1]"
                 hide-default-footer

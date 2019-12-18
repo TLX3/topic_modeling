@@ -5,7 +5,7 @@
       >
         <div style="display: flex; justify-content: space-evenly;">
           <div>
-            <div class="headline font-weight-bold">Select Central Index Keys (CIKs) for Topic Modeling</div>
+            <div class="headline font-weight-bold mb-3">Select Central Index Keys (CIKs) for Topic Modeling</div>
             <v-select
                     color="#273a56"
                     v-model="selectedCIKs"
@@ -17,7 +17,7 @@
             />
           </div>
           <div>
-            <div class="headline font-weight-bold">Select number of topics</div>
+            <div class="headline font-weight-bold mb-3">Select number of topics</div>
             <v-select
                     color="#273a56"
                     v-model="num_topics"

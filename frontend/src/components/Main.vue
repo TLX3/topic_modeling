@@ -6,7 +6,7 @@
       <loading :active.sync="isLoading" :is-full-page="true"></loading>
       <v-flex style="display: flex; justify-content: space-evenly;">
         <SelectCIKs @updateCIKs="updateCIKs" @updateNumTopics="updateNumTopics"/>
-        <v-btn style="margin-top: 55px;" v-if="selectedCIKs.length > 0" @click='getTopics' color="green" dark>Generate Topics</v-btn>
+        <v-btn style="margin-top: 70px;" v-if="selectedCIKs.length > 0" @click='getTopics' color="green" dark>Generate Topics</v-btn>
       </v-flex>
       <TopicVisualization :chartData="chartData" :analyticsData="analyticsData"/>
     </v-layout>

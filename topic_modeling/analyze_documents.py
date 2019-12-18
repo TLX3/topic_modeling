@@ -34,6 +34,7 @@ def create_topic_analytics(lda_model, corpus, documents, CIKs):
     topic_num_keywords = df_topic_keywords[['Dominant_Topic', 'Topic_Keywords']]
     df_topic_distribution = pd.concat([topic_num_keywords, topic_counts, topic_contribution], axis=1)
     df_topic_distribution.columns = ['Dominant_Topic', 'Topic_Keywords', 'Num_Documents', 'Percentage_Documents']
+    print(df_topic_distribution.shape)
     df_topic_distribution.dropna(subset=['Num_Documents'], how='all', inplace=True)
 
     # Create df for displaying most relevant document for each topic
@@ -45,7 +46,6 @@ def create_topic_analytics(lda_model, corpus, documents, CIKs):
                                                 axis=0)
     df_representative_topic.reset_index(drop=True, inplace=True)
     df_representative_topic.columns = ['Topic_Num', "Topic_Percentage_Contrib", "Keywords", "Text"]
-    #df_representative_topic['CIKs'] = CIKs
 
     return df_dominant_topic, df_topic_distribution, df_representative_topic
 
@@ -109,7 +109,7 @@ def build_lda_model(CIKs, num_topics):
         current_topic = []
         for percent_topic in topic_str.split(' + '):
             percent, term = percent_topic.split('*')
-            current_topic.append({'weight': float(percent), 'term': term[1:-1]})
+            current_topic.append({'weight': float(percent) * 1000, 'term': term[1:-1]})
         formatted_topics.append(current_topic)
 
     # Create df for analytics over topics
