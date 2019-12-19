@@ -3,7 +3,7 @@
 
 There exists a large amount of unstructured textual data with regards to SEC filings. Based on the immense size and continual growth of the SEC filing corpus, it is difficult to access relevant content within the collection. By using topic modeling on SEC filings, we uncover hidden topics that are present across the collection that can facilitate the reduction of irrelevant documents for users. 
 
-This application takes select prescraped documents obtained at my workplace Lazard and runs topic modeling by using LDA on those documents. The user will select a company by CIK, the number of topics, and the size of n-grams to generate the topic model. The presentation and visualization of results are then both available in tabular form and in a word cloud
+This backend Python code takes select prescraped documents obtained from my workplace Lazard and runs topic modeling by using LDA on those documents. The web application allows users select a company by CIK, the number of topics, and the size of n-grams to generate the topic model. The presentation and visualization of results are then both available in tabular form and in a word cloud
 
 The goal of this project is to build an investment banking specific tool that uncover both single word and phrases as topics in SEC filings. Additionally, uncovered topics might provide grounds or inspiration for research into some other domain. In other words, detect trends that would have otherwise been difficult to capture or would have been missed.
 ## Getting Started
@@ -58,6 +58,8 @@ Go to [http://localhost:8080/](http://localhost:8080/) and use the web app!
 * [Flask](http://flask.palletsprojects.com/en/1.1.x/) - Micro web framework used to build APIs
 * [Vue](https://vuejs.org/) - Framework for building user interfaces and single page applications
 * [Gensim](https://radimrehurek.com/gensim/) - Open-source library for unsupervised topic modeling and natural language processing
+* [Highcharts](https://www.highcharts.com/) - Javascript library for charting
+* [Vuetify](https://vuetifyjs.com/en/) - Material design component framework for Vue.js
 * and many more python and node dependencies
 
 ## Author
