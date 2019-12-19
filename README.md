@@ -121,6 +121,11 @@ The files can have metadata associated with it such as Date Filed, Form Type, Co
 
 * **Tseten Lama** - tsetenl2@illinois.edu
 
+## Acknowledgements
+[Gensim LDA tutorial](https://radimrehurek.com/gensim/models/ldamodel.html)
+
+
+[Machine Learning Plus tutorial](https://www.machinelearningplus.com/nlp/topic-modeling-gensim-python/)
 ## License
 
 This project is licensed under the MIT License
