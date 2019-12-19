@@ -1,6 +1,7 @@
 import os
 import string
 import re
+import sys
 from azure.storage.blob import BlockBlobService
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
@@ -30,7 +31,7 @@ def cleanse(doc):
     return cleansed_doc
 
 
-def get_SEC_Documents():
+def get_SEC_Documents(num_docs):
     # Azure blob credentials for LDAG
     account_name = 'stanfordproject'
     account_key = 'Brs84kSEd9yycVvTvbjuGxYlqBsROZHFi2CHV48tRDGO5 + jFwG83j0hraXPDogAeFZNUlBLKMCyhBeX / iWo9bA =='
@@ -44,7 +45,7 @@ def get_SEC_Documents():
     blob_list = [b for b in generator]
     count = 0
 
-    for blob in blob_list[0:100]:
+    for blob in blob_list[0:num_docs]:
         blob_text = block_blob_service.get_blob_to_text('14d9', blob.name, encoding='latin-1')
         raw_text = blob_text.content
         try:
@@ -73,4 +74,4 @@ def get_SEC_Documents():
 
 
 if __name__ == '__main__':
-    get_SEC_Documents()
+    get_SEC_Documents(int(sys.argv[1]))
