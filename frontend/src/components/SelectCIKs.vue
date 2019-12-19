@@ -51,7 +51,7 @@
             CIKs: [],
             selectedCIKs: [],
             num_topics: 5,
-            ngram_num: 2,
+            ngram_num: 3,
             topic_choices: [3, 4, 5, 6, 7, 8, 9, 10]
         }),
         mounted () {
