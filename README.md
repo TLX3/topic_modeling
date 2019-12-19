@@ -15,15 +15,19 @@ If you don't have them installed they can be obtained from
 https://nodejs.org/en/download/
 https://www.python.org/downloads/
 ```
-
+You will also require LDA MALLET extracted locally by downloading from [http://mallet.cs.umass.edu/dist/mallet-2.0.8.zip](http://mallet.cs.umass.edu/dist/mallet-2.0.8.zip). Then extract the contents of the zip to topic_modeling. You should have the directory
+```
+Course_Project/topic_modeling/mallet-2.0.8
+```
 ### Installation
 
 Instructions to get the application running locally
 
 At the main project directory level, run these commands from a terminal.
-* It would be advised to first create a new virtual environment before installing Python packages.
+* If you have many other projects locally, it would be advised to first create a new virtual environment before installing Python packages.
 ```
-pip install -r requirements.txt
+pip install -r requirements.txt 
+# The installation might take a while during setup.py for pycparse and nltk.
 ```
 
 And then
@@ -35,11 +39,12 @@ npm install
 
 ## Deploying locally
 At the main project directory level, run these commands from a terminal.
+Start the Flask server by
 ```
 cd topic_modeling
 python app.py
 ```
-and from another terminal
+then from another terminal, serve the client side application by
 ```
 cd frontend
 npm run serve
