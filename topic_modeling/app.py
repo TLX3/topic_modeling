@@ -30,5 +30,10 @@ def get_topics():
     return json_response(200, topic_data)
 
 
+@app.route('/')
+def index():
+    return "<h1>Topic Modeling API</h1>"
+
+
 if __name__ == '__main__':
     app.run(threaded=True)

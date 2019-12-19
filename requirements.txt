@@ -5,3 +5,4 @@ gensim
 pandas
 flask
 flask_cors
+gunicorn
