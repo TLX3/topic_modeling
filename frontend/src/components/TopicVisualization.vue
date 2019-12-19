@@ -15,7 +15,7 @@
               </div>
               <v-spacer></v-spacer>
               <v-select
-                      style="margin-top: 30px;"
+                      style="margin-top: 30px; max-width: 200px;"
                       color="#273a56"
                       solo
                       light

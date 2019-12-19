@@ -1,9 +1,9 @@
-# CS410 Course Project - Topic modeling on select 14D9 documents
+# Course Project - Topic modeling on select 14D9 documents
 ### Introduction
 
 There exists a large amount of unstructured textual data with regards to SEC filings. Based on the immense size and continual growth of the SEC filing corpus, it is difficult to access relevant content within the collection. By using topic modeling on SEC filings, we uncover hidden topics that are present across the collection that can facilitate the reduction of irrelevant documents for users. 
 
-This backend Python code takes select prescraped documents obtained from my workplace Lazard and runs topic modeling by using LDA on those documents. The web application allows users select a company by CIK, the number of topics, and the size of n-grams to generate the topic model. The presentation and visualization of results are then both available in tabular form and in a word cloud
+This backend Python code takes select prescraped documents obtained from my workplace Lazard and runs topic modeling by using LDA on those documents. The web application allows users select a company by CIK ([You can search using these using Fast Search on the SEC site](https://www.sec.gov/edgar/searchedgar/companysearch.html)), the number of topics, and the size of n-grams to generate the topic model. The presentation and visualization of results are then both available in tabular form and in a word cloud
 
 The goal of this project is to build an investment banking specific tool that uncover both single word and phrases as topics in SEC filings. Additionally, uncovered topics might provide grounds or inspiration for research into some other domain. In other words, detect trends that would have otherwise been difficult to capture or would have been missed.
 ## Getting Started
@@ -91,10 +91,14 @@ Go to [http://localhost:8080/](http://localhost:8080/) and use the web app!
 * [Highcharts](https://www.highcharts.com/) - Javascript library for charting
 * [Vuetify](https://vuetifyjs.com/en/) - Material design component framework for Vue.js
 * and many more python and node dependencies
-## API
+## API and core functions
 app.py has two endpoints GET /get_CIKs and GET /get_topics. Since the user intially doesn't know what the possible companies/CIKs are, the backend will have to provide it to them. available_CIKs gets the directory names inside of data/14d9 in a list and returns them. The directory names correspond to a CIK.
 
 /get_topics uses the build_lda_model method imported from analyze_documents. The arguments required for this method are CIKs, number of topics, and the size of the n-grams of the phrases within each topic.
+
+build_lda_model takes in CIKs, number of topics, and size of ngrams and outputs a 2D array of topics, where each topic is an array of objects which each have a term and weight. Also, it outputs 2 dictionaries, one for dominant topic of each document and another for the most representative document for a topic. 
+To begin, I first have to obtain the documents to feed into the LDA MALLET model. I go through the /data/14d9 directory and find the respective CIK directories. I take the documents for each of CIK directories and collect them. Those documents are then transformed using gensim's Phrases method to generate bigrams, trigrams, etc. Then a dictionary is generated and along with a corpus using those documents. With those in place, I can run Ldamallet and generate the topics.
+I then call the create_topic_analytics methods to get the dataframes to show analytics about the topics. By feeding the corpus to the model, I can get the topic breakdown at the document level. I can then sort those documents by topic weight and collect the most dominant one. By grouping the dataframe by the dominant topic, I can obtain the most relevant document for each topic.
 ## Future extensions
 
 Currently, the application is tied to prescraped 14D9 found on Lazard's cloud. Also, the files are persisted and stored locally. In the future, the application can be extended to include arbitrary SEC documents across any CIK/ticker.

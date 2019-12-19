@@ -27,7 +27,7 @@
     data: () => ({
         selectedCIKs: [],
         num_topics: 5,
-        ngram_num: 2,
+        ngram_num: 3,
         chartData: [],
         analyticsData: [],
         isLoading: false
