@@ -1,1 +1,0 @@
-web: gunicorn --pythonpath topic_modeling app
