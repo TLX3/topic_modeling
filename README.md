@@ -6,6 +6,9 @@ There exists a large amount of unstructured textual data with regards to SEC fil
 This backend Python code takes select prescraped documents obtained from my workplace Lazard and runs topic modeling by using LDA on those documents. The web application allows users select a company by CIK ([You can search using these using Fast Search on the SEC site](https://www.sec.gov/edgar/searchedgar/companysearch.html)), the number of topics, and the size of n-grams to generate the topic model. The presentation and visualization of results are then both available in tabular form and in a word cloud
 
 The goal of this project is to build an investment banking specific tool that uncover both single word and phrases as topics in SEC filings. Additionally, uncovered topics might provide grounds or inspiration for research into some other domain. In other words, detect trends that would have otherwise been difficult to capture or would have been missed.
+
+### Live Version
+[https://sec-topic-modeling.herokuapp.com/](https://sec-topic-modeling.herokuapp.com/)
 ## Getting Started
 
 These instructions will get the project up and running.
