@@ -73,7 +73,7 @@ Go to [http://localhost:8080/](http://localhost:8080/) and use the web app!
             ├── SelectCIKs.vue           # Various select inputs
             ├── TopicAnalytics.vue       # Various data tables to display analytics information
             └── TopicVisualization.vue   # Highcharts word cloud and table by topic
-        ├── plugins            # Enable Vuetify
+        ├── plugins            # Enables and imports Vuetify
         ├── App.vue            # Core Vue component that is mounted to markup
         └── main.js            # Initialzation of app along with imports
     ├── .env.development       # Environment variables
@@ -91,7 +91,17 @@ Go to [http://localhost:8080/](http://localhost:8080/) and use the web app!
 * [Highcharts](https://www.highcharts.com/) - Javascript library for charting
 * [Vuetify](https://vuetifyjs.com/en/) - Material design component framework for Vue.js
 * and many more python and node dependencies
+## API
+app.py has two endpoints GET /get_CIKs and GET /get_topics. Since the user intially doesn't know what the possible companies/CIKs are, the backend will have to provide it to them. available_CIKs gets the directory names inside of data/14d9 in a list and returns them. The directory names correspond to a CIK.
 
+/get_topics uses the build_lda_model method imported from analyze_documents. The arguments required for this method are CIKs, number of topics, and the size of the n-grams of the phrases within each topic.
+## Future extensions
+
+Currently, the application is tied to prescraped 14D9 found on Lazard's cloud. Also, the files are persisted and stored locally. In the future, the application can be extended to include arbitrary SEC documents across any CIK/ticker.
+ 
+A company to CIK/Ticker mapping can be implemented to support this application. 
+
+The files can have metadata associated with it such as Date Filed, Form Type, Company Name, CIK. These along with the file can be persisted to a cloud elasticsearch instance. This will allow analytics with a time dimension and also improve the UI with greater search filters.
 ## Author
 
 * **Tseten Lama** - tsetenl2@illinois.edu

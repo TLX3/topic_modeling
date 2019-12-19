@@ -8,7 +8,7 @@ import pandas as pd
 ITERATIONS = 100
 
 
-def create_topic_analytics(lda_model, corpus, documents, CIKs):
+def create_topic_analytics(lda_model, corpus, documents):
     # Create df to aggregate and display topic breakdown
     topics_df = pd.DataFrame()
     for i, row in enumerate(lda_model[corpus]):
@@ -93,6 +93,6 @@ def build_lda_model(CIKs, num_topics, ngram_num):
         formatted_topics.append(current_topic)
 
     # Create df for analytics over topics
-    df_dominant_topic, df_representative_topic = create_topic_analytics(lda_mallet, corpus, documents, CIKs)
+    df_dominant_topic, df_representative_topic = create_topic_analytics(lda_mallet, corpus, documents)
 
     return formatted_topics, df_dominant_topic.to_dict('records'), df_representative_topic.to_dict('records')
