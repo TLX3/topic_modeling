@@ -53,6 +53,36 @@ cd frontend
 npm run serve
 ```
 Go to [http://localhost:8080/](http://localhost:8080/) and use the web app!
+## Project Structure
+### /topic_modeling
+    .
+    ├── data                   # Cleansed and scraped 14D9 files
+    ├── mallet-2.0.8           # Files needed to run LDA Mallet model
+    ├── __init__.py            # Define variables at package level
+    ├── analyze_documents.py   # Build LDA model and returns various analytics
+    ├── app.py                 # Flask endpoints for client
+    └── fetch_documents.py     # Get and save prescraped files from Azure cloud container
+### /frontend
+    .
+    ├── node_modules           # Various packages and dependencies required to run web application
+    ├── public                 # Static assets not processed through webpack
+    ├── src                        
+        ├── assets             # Images and logos
+        ├── components         # Vue.js components 
+            ├── Main.vue                 # Parent component for both user inputs and output charts and tables
+            ├── SelectCIKs.vue           # Various select inputs
+            ├── TopicAnalytics.vue       # Various data tables to display analytics information
+            └── TopicVisualization.vue   # Highcharts word cloud and table by topic
+        ├── plugins            # Enable Vuetify
+        ├── App.vue            # Core Vue component that is mounted to markup
+        └── main.js            # Initialzation of app along with imports
+    ├── .env.development       # Environment variables
+    ├── .env.production        
+    ├── .gitignore
+    ├── .babel.config.js       # Javascript compiler config
+    ├── .package-lock.json
+    ├── README.md
+    └── vue.config.js          # vue-cli config
 ## Built With
 
 * [Flask](http://flask.palletsprojects.com/en/1.1.x/) - Micro web framework used to build APIs
