@@ -32,7 +32,7 @@ def cleanse(doc):
 
 
 def get_SEC_Documents(num_docs):
-    # Azure blob credentials for LDAG
+    # Azure blob credentials for LDAG's public sample of prefetched SEC documents
     account_name = 'stanfordproject'
     account_key = 'Brs84kSEd9yycVvTvbjuGxYlqBsROZHFi2CHV48tRDGO5 + jFwG83j0hraXPDogAeFZNUlBLKMCyhBeX / iWo9bA =='
 
