@@ -17,15 +17,28 @@
             />
           </div>
           <div>
-            <div class="headline font-weight-bold mb-3">Select number of topics</div>
-            <v-select
-                    color="#273a56"
-                    v-model="num_topics"
-                    :items="topic_choices"
-                    label="Ex: 10"
-                    solo
-                    @change="$emit('updateNumTopics', num_topics)"
-            />
+            <div>
+              <div class="headline font-weight-bold mb-3">Select number of topics</div>
+              <v-select
+                      color="#273a56"
+                      v-model="num_topics"
+                      :items="topic_choices"
+                      label="Ex: 10"
+                      solo
+                      @change="$emit('updateNumTopics', num_topics)"
+              />
+            </div>
+            <div>
+              <div class="headline font-weight-bold mb-3">Select size of N-gram</div>
+              <v-select
+                      color="#273a56"
+                      v-model="ngram_num"
+                      :items="[1, 2, 3, 4]"
+                      label="Ex: 2"
+                      solo
+                      @change="$emit('updateNgramNum', ngram_num)"
+              />
+            </div>
           </div>
         </div>
       </v-flex>
@@ -38,6 +51,7 @@
             CIKs: [],
             selectedCIKs: [],
             num_topics: 5,
+            ngram_num: 2,
             topic_choices: [3, 4, 5, 6, 7, 8, 9, 10]
         }),
         mounted () {

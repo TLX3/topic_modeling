@@ -28,15 +28,6 @@ def create_topic_analytics(lda_model, corpus, documents, CIKs):
     df_dominant_topic = df_topic_keywords.reset_index()
     df_dominant_topic.columns = ['Document_No', 'Dominant_Topic', 'Topic_Percentage_Contrib', 'Keywords', 'Text']
 
-    # Create df for displaying topic distribution across documents
-    topic_counts = df_topic_keywords['Dominant_Topic'].value_counts()
-    topic_contribution = round(topic_counts / topic_counts.sum(), 4)
-    topic_num_keywords = df_topic_keywords[['Dominant_Topic', 'Topic_Keywords']]
-    df_topic_distribution = pd.concat([topic_num_keywords, topic_counts, topic_contribution], axis=1)
-    df_topic_distribution.columns = ['Dominant_Topic', 'Topic_Keywords', 'Num_Documents', 'Percentage_Documents']
-    print(df_topic_distribution.shape)
-    df_topic_distribution.dropna(subset=['Num_Documents'], how='all', inplace=True)
-
     # Create df for displaying most relevant document for each topic
     df_representative_topic = pd.DataFrame()
     df_topics_grouped = df_topic_keywords.groupby('Dominant_Topic')
@@ -47,10 +38,10 @@ def create_topic_analytics(lda_model, corpus, documents, CIKs):
     df_representative_topic.reset_index(drop=True, inplace=True)
     df_representative_topic.columns = ['Topic_Num', "Topic_Percentage_Contrib", "Keywords", "Text"]
 
-    return df_dominant_topic, df_topic_distribution, df_representative_topic
+    return df_dominant_topic, df_representative_topic
 
 
-def build_lda_model(CIKs, num_topics):
+def build_lda_model(CIKs, num_topics, ngram_num):
     documents = []
     lda_model = None
     dct = None
@@ -68,25 +59,14 @@ def build_lda_model(CIKs, num_topics):
             except IOError as e:
                 print("Couldn't open file (%s)." % e)
 
-    phrases_only = [[] for _ in range(len(documents))]
-
     # Add bigram, trigrams, and quadgrams
     bigram = Phrases(documents)
-    trigram = Phrases(bigram[documents])
-    quadgram = Phrases(trigram[documents])
-    for idx in range(len(documents)):
-        for token in bigram[documents[idx]]:
-            if '_' in token:
-                phrases_only[idx].append(token)
-        for token in trigram[documents[idx]]:
-            if '_' in token:
-                phrases_only[idx].append(token)
-        for token in quadgram[documents[idx]]:
-            if '_' in token:
-                phrases_only[idx].append(token)
-
-    original_documents = documents
-    documents = phrases_only
+    documents = [bigram[line] for line in documents]
+    trigram = Phrases(documents)
+    documents = [trigram[line] for line in documents]
+    quadgram = Phrases(documents)
+    documents = [quadgram[line] for line in documents]
+    documents = list(map(lambda document: list(filter(lambda word: word.count('_') == (ngram_num - 1), document)), documents))
 
     # Dictionary
     dct = corpora.Dictionary(documents)
@@ -113,6 +93,6 @@ def build_lda_model(CIKs, num_topics):
         formatted_topics.append(current_topic)
 
     # Create df for analytics over topics
-    df_dominant_topic, df_topic_distribution, df_representative_topic = create_topic_analytics(lda_mallet, corpus, documents, CIKs)
+    df_dominant_topic, df_representative_topic = create_topic_analytics(lda_mallet, corpus, documents, CIKs)
 
-    return formatted_topics, df_dominant_topic.to_dict('records'), df_topic_distribution.to_dict('records'), df_representative_topic.to_dict('records')
+    return formatted_topics, df_dominant_topic.to_dict('records'), df_representative_topic.to_dict('records')

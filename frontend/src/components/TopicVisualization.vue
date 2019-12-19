@@ -84,8 +84,8 @@
         data: () => ({
             currentView: true,
             showAnalytics: 0,
-            analyticsType: "Dominant topic in each document",
-            analyticsTypes: ["Dominant topic in each document", "Topic distribution by company", "Most representative document for topic"],
+            analyticsType: "Most representative document for topic",
+            analyticsTypes: ["Dominant topic in each document", "Most representative document for topic"],
             headers: [
               { text: 'Term', value: 'term' },
               { text: 'Score', value: 'weight' }

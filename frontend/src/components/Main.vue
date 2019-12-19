@@ -5,7 +5,7 @@
     >
       <loading :active.sync="isLoading" :is-full-page="true"></loading>
       <v-flex style="display: flex; justify-content: space-evenly;">
-        <SelectCIKs @updateCIKs="updateCIKs" @updateNumTopics="updateNumTopics"/>
+        <SelectCIKs @updateCIKs="updateCIKs" @updateNumTopics="updateNumTopics" @updateNgramNum="updateNgramNum" />
         <v-btn style="margin-top: 70px;" v-if="selectedCIKs.length > 0" @click='getTopics' color="green" dark>Generate Topics</v-btn>
       </v-flex>
       <TopicVisualization :chartData="chartData" :analyticsData="analyticsData"/>
@@ -27,6 +27,7 @@
     data: () => ({
         selectedCIKs: [],
         num_topics: 5,
+        ngram_num: 2,
         chartData: [],
         analyticsData: [],
         isLoading: false
@@ -38,13 +39,17 @@
         updateNumTopics (num_topics) {
           this.num_topics = num_topics
         },
+        updateNgramNum (ngram_num) {
+            this.ngram_num = ngram_num
+        },
         getTopics () {
             this.isLoading = true
             let url = process.env.VUE_APP_API_URL + '/get_topics?'
             this.selectedCIKs.forEach((CIK) => {
                 url += `CIKs=${CIK}&`
             })
-            url += `num_topics=${this.num_topics}`
+            url += `num_topics=${this.num_topics}&`
+            url += `ngram_num=${this.ngram_num}`
             fetch(url)
                 .then(response => response.json())
                 .then((data) => {
