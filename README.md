@@ -8,6 +8,7 @@ This backend Python code takes select prescraped documents obtained from my work
 The goal of this project is to build an investment banking specific tool that uncover both single word and phrases as topics in SEC filings. Additionally, uncovered topics might provide grounds or inspiration for research into some other domain. In other words, detect trends that would have otherwise been difficult to capture or would have been missed.
 
 ### Live Version
+Please visit [https://topic-modeling-sec14d9.herokuapp.com/](https://topic-modeling-sec14d9.herokuapp.com/) first to reawaken the dyno. I'm on free tier on Heroku so the dyno for the flask server falls asleeps. The dyno needs to be awake for the client to make request to it.
 [https://sec-topic-modeling.herokuapp.com/](https://sec-topic-modeling.herokuapp.com/)
 ## Getting Started
 
